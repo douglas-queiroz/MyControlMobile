@@ -17,12 +17,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.activity.Cliente"
-            android:label="@string/title_activity_cliente" >
-        </activity>
-        <activity
             android:name=".view.activity.ClientActivity"
             android:label="@string/title_activity_client" >
+        </activity>
+        <activity
+            android:name=".view.activity.ClientDetailActivity"
+            android:label="@string/title_activity_client_detail" >
         </activity>
     </application>
 

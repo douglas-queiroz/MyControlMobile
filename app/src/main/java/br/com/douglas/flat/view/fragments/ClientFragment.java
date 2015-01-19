@@ -1,6 +1,7 @@
 package br.com.douglas.flat.view.fragments;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ import br.com.douglas.flat.model.Client;
 import br.com.douglas.flat.service.ClientService;
 import br.com.douglas.flat.view.activity.ClientActivity;
 import br.com.douglas.flat.view.activity.MainActivity;
+import br.com.douglas.flat.view.dialog.AlertDialog;
 
 /**
  * A fragment representing a list of Items.
@@ -32,7 +35,7 @@ import br.com.douglas.flat.view.activity.MainActivity;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class ClientFragment extends Fragment implements AbsListView.OnItemClickListener {
+public class ClientFragment extends Fragment implements AbsListView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     /**
      * The fragment argument representing the section number for this
@@ -45,6 +48,7 @@ public class ClientFragment extends Fragment implements AbsListView.OnItemClickL
     private static final String ARG_PARAM2 = "param2";
     private ClientService service;
     private List<Client> clients = new ArrayList<Client>();
+    private View view;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -92,24 +96,19 @@ public class ClientFragment extends Fragment implements AbsListView.OnItemClickL
         }
 
         service = new ClientService(getActivity());
-
-        clients = service.get();
-
-        mAdapter = new ArrayAdapter<Client>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, clients);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_client, container, false);
+        this.view = inflater.inflate(R.layout.fragment_client, container, false);
 
-        // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        updateListView();
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+
+        mListView.setOnItemLongClickListener(this);
 
         Button fab = (Button) view.findViewById(R.id.fabbutton);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +120,12 @@ public class ClientFragment extends Fragment implements AbsListView.OnItemClickL
         });
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        updateListView();
+        super.onResume();
     }
 
     @Override
@@ -182,4 +187,36 @@ public class ClientFragment extends Fragment implements AbsListView.OnItemClickL
         public void onFragmentInteraction(String id);
     }
 
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+        builder.setMessage("Deseja realemnte excluir " + clients.get(position) + "?")
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        service.delete(clients.get(position));
+                        updateListView();
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                })
+                .setTitle("Atenção");
+        // Create the AlertDialog object and return it
+        builder.create().show();
+
+        Toast.makeText(getActivity(), "TEste  " + clients.get(position), Toast.LENGTH_SHORT ).show();
+        return false;
+    }
+
+    private void updateListView(){
+        clients = service.get();
+        mAdapter = new ArrayAdapter<Client>(getActivity(),
+                android.R.layout.simple_list_item_1, android.R.id.text1, clients);
+
+        // Set the adapter
+        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+    }
 }

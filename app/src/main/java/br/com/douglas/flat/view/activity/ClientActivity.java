@@ -1,18 +1,34 @@
 package br.com.douglas.flat.view.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import br.com.douglas.flat.R;
+import br.com.douglas.flat.model.Client;
+import br.com.douglas.flat.service.ClientService;
 
 public class ClientActivity extends ActionBarActivity {
+
+    private ClientService clientService;
+    private EditText edtName;
+    private EditText edtPhone;
+    private EditText edtAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client);
+        edtName = (EditText) findViewById(R.id.edtName);
+        edtPhone = (EditText) findViewById(R.id.edtPhone);
+        edtAddress = (EditText) findViewById(R.id.edtAddress);
+
+        clientService = new ClientService(this);
     }
 
 
@@ -33,11 +49,24 @@ public class ClientActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            save();
             return true;
         }
 
         onBackPressed();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void save(){
+        Client client = new Client();
+        client.setName(edtName.getText().toString());
+        client.setPhone(edtPhone.getText().toString());
+        client.setAddress(edtAddress.getText().toString());
+
+        clientService.save(client);
+
+        Toast.makeText(this, "Cliente salvo com sucesso!", Toast.LENGTH_SHORT).show();
+        onBackPressed();
     }
 }

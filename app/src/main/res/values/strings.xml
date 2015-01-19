@@ -12,5 +12,9 @@
     <string name="title_activity_cliente">Cliente</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_client">Clientes</string>
+    <string name="name">Nome</string>
+    <string name="address">Endereço</string>
+    <string name="phone">Fone</string>
+    <string name="title_activity_client_detail">Cliente</string>
 
 </resources>
