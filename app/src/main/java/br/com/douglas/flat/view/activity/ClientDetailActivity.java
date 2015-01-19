@@ -4,15 +4,32 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import br.com.douglas.flat.R;
+import br.com.douglas.flat.model.Client;
+
 public class ClientDetailActivity extends ActionBarActivity {
+
+    private Client client;
+    private TextView txtName;
+    private TextView txtPhone;
+    private TextView txtAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_detail);
 
+        client = (Client) getIntent().getExtras().getSerializable("client");
+
+        txtName = (TextView) findViewById(R.id.txtName);
+        txtPhone = (TextView) findViewById(R.id.txtPhone);
+        txtAddress = (TextView) findViewById(R.id.txtAddress);
+
+        txtName.setText(client.getName());
+        txtPhone.setText(client.getPhone());
+        txtAddress.setText(client.getAddress());
     }
 
 

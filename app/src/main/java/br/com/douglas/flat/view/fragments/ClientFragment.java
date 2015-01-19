@@ -23,8 +23,8 @@ import br.com.douglas.flat.R;
 import br.com.douglas.flat.model.Client;
 import br.com.douglas.flat.service.ClientService;
 import br.com.douglas.flat.view.activity.ClientActivity;
+import br.com.douglas.flat.view.activity.ClientDetailActivity;
 import br.com.douglas.flat.view.activity.MainActivity;
-import br.com.douglas.flat.view.dialog.AlertDialog;
 
 /**
  * A fragment representing a list of Items.
@@ -152,11 +152,12 @@ public class ClientFragment extends Fragment implements AbsListView.OnItemClickL
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            mListener.onFragmentInteraction(clients.get(position).getId() + "");
-        }
+        Intent intent = new Intent(this.getActivity(), ClientDetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("client", clients.get(position));
+        intent.putExtras(bundle);
+
+        getActivity().startActivity(intent);
     }
 
     /**

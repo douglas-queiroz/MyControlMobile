@@ -1,10 +1,13 @@
 package br.com.douglas.flat.model;
 
+import java.io.Serializable;
+
 /**
  * Created by douglas on 16/01/15.
  */
-public class Client extends AbstractModel{
+public class Client extends AbstractModel implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     public static final String TABLE = "clients";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_PHONE = "phone";
