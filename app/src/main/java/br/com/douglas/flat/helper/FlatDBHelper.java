@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import br.com.douglas.flat.model.Client;
+import br.com.douglas.flat.model.Contact;
 
 /**
  * Created by douglas on 16/01/15.
@@ -21,11 +22,13 @@ public class FlatDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(Client.SQL_CREATE);
+        db.execSQL(Contact.SQL_CREATE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(Client.SQL_DELETE);
+        db.execSQL(Contact.SQL_DELETE);
         onCreate(db);
     }
 }

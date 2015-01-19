@@ -18,7 +18,7 @@ import br.com.douglas.flat.model.Client;
 public abstract class AbstractDAO<T extends AbstractModel> {
 
     private FlatDBHelper mDBHelper;
-    private SQLiteDatabase db;
+    protected SQLiteDatabase db;
 
     public AbstractDAO(Context context){
         mDBHelper = new FlatDBHelper(context);
@@ -48,11 +48,13 @@ public abstract class AbstractDAO<T extends AbstractModel> {
         c.moveToFirst();
 
         List<T> objectLis = new ArrayList<T>();
-        do{
-            T object = convertToObject(c);
-            objectLis.add(object);
-        }while(c.moveToNext());
 
+        if (c.moveToFirst()) {
+            do {
+                T object = convertToObject(c);
+                objectLis.add(object);
+            } while (c.moveToNext());
+        }
         return objectLis;
     }
 

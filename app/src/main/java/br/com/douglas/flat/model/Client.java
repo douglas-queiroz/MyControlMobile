@@ -1,11 +1,15 @@
 package br.com.douglas.flat.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by douglas on 16/01/15.
  */
 public class Client extends AbstractModel {
+
+    private static final long serialVersionUID = 1L;
 
     public static final String TABLE = "clients";
     public static final String COLUMN_NAME = "name";
@@ -24,6 +28,7 @@ public class Client extends AbstractModel {
     private String phone;
     private String address;
     private double sale;
+    private List<Contact> contacts = new ArrayList<Contact>();
 
     public String getName() {
         return name;
@@ -55,6 +60,14 @@ public class Client extends AbstractModel {
 
     public void setSale(double sale) {
         this.sale = sale;
+    }
+
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
     }
 
     @Override

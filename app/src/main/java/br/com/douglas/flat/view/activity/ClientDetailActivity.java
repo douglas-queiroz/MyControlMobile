@@ -12,10 +12,12 @@ import android.widget.Toast;
 import br.com.douglas.flat.R;
 import br.com.douglas.flat.model.Client;
 import br.com.douglas.flat.service.ClientService;
+import br.com.douglas.flat.service.ContactService;
 
 public class ClientDetailActivity extends ActionBarActivity {
 
     private ClientService service;
+    private ContactService contactService;
     private Client client;
     private TextView txtName;
     private TextView txtPhone;
@@ -32,11 +34,15 @@ public class ClientDetailActivity extends ActionBarActivity {
         txtPhone = (TextView) findViewById(R.id.txtPhone);
         txtAddress = (TextView) findViewById(R.id.txtAddress);
 
-        txtName.setText(client.getName());
-        txtPhone.setText(client.getPhone());
-        txtAddress.setText(client.getAddress());
-
         service = new ClientService(this);
+        contactService = new ContactService(this);
+        client.setContacts(contactService.get(client));
+
+        txtName.setText(client.getName());
+
+        if(!client.getContacts().isEmpty())
+            txtPhone.setText(client.getContacts().get(0).getNumber());
+        txtAddress.setText(client.getAddress());
     }
 
 

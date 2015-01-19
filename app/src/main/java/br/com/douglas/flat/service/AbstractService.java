@@ -12,11 +12,12 @@ import br.com.douglas.flat.model.AbstractModel;
  */
 public abstract class AbstractService<T extends AbstractModel> {
 
-    public void save(T object){
+    public long save(T object){
         if(object.getId() == 0){
-            getDao().insert(object);
+            return getDao().insert(object);
         }else{
             getDao().update(object);
+            return object.getId();
         }
     }
 

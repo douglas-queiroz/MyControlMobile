@@ -1,6 +1,7 @@
 package br.com.douglas.flat.view.fragments;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -12,7 +13,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.douglas.flat.R;
+import br.com.douglas.flat.model.Client;
+import br.com.douglas.flat.model.Contact;
 import br.com.douglas.flat.service.ClientService;
 import br.com.douglas.flat.view.activity.MainActivity;
 
@@ -56,6 +62,8 @@ public class StartFragment extends Fragment{
             }
         });
 
+        clientService = new ClientService(this.getActivity());
+
         return rootView;
     }
 
@@ -66,29 +74,59 @@ public class StartFragment extends Fragment{
                 getArguments().getInt(ARG_SECTION_NUMBER));
     }
 
-    void getContact(){
-        Cursor c = this.getActivity().getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,
-                null, null, null, null);
-        if (c.moveToFirst())
-        {
-            do {
-                String id = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
+    private void getContact(){
+        final List<Client> clients = new ArrayList<Client>();
 
-                String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+        final ProgressDialog progDailog = ProgressDialog.show(this.getActivity(), "Importando contatos",
+                "Por favor aguarde!", true);
+        final Activity activity = this.getActivity();
 
-                if (hasPhone.equalsIgnoreCase("1")) {
-                    Cursor phones = this.getActivity().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
-                    phones.moveToFirst();
+        new Thread(){
+            public void run(){
+                Cursor c = activity.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI,
+                        null, null, null, null);
+                if (c.moveToFirst())
+                {
                     do {
-                        String cId = phones.getString(phones.getColumnIndex(ContactsContract.Contacts._ID));
-                        String cNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        String nameContact = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+                        String id = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts._ID));
 
-                        Log.i("Douglas", cId +  nameContact + " " + cNumber);
-                    }while(phones.moveToNext());
+                        String hasPhone = c.getString(c.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+
+                        if (hasPhone.equalsIgnoreCase("1")) {
+                            Cursor phones = activity.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
+                            phones.moveToFirst();
+                            do {
+                                String cId = phones.getString(phones.getColumnIndex(ContactsContract.Contacts._ID));
+                                String cNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                String nameContact = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+
+                                Client client = null;
+
+                                if (!clients.isEmpty() && clients.get(clients.size()-1).getName().equals(nameContact)){
+                                    client = clients.get(clients.size() -1);
+                                }else{
+                                    client = new Client();
+                                }
+
+                                client.setName(nameContact);
+                                Contact contact = new Contact();
+                                contact.setNumber(cNumber);
+                                contact.setClient(client);
+                                client.getContacts().add(contact);
+
+                                clients.add(client);
+                            }while(phones.moveToNext());
+                            phones.close();
+                        }
+                    }while (c.moveToNext());
+                    c.close();
                 }
-            }while (c.moveToNext());
-        }
+
+                clientService.save(clients);
+
+                progDailog.dismiss();
+            }
+        }.start();
     }
 }

@@ -4,7 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.douglas.flat.model.Client;
+import br.com.douglas.flat.model.Contact;
 
 /**
  * Created by douglas on 16/01/15.
@@ -60,5 +64,34 @@ public class ClientDAO extends AbstractDAO<Client> {
         client.setSale(cursor.getDouble(column_id));
 
         return client;
+    }
+
+    public Client get(String name){
+        Client client = null;
+        String selection = Client.COLUMN_NAME + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(name) };
+        Cursor c = db.query(getTable(), getColumns(), selection, selectionArgs, null, null, null);
+        if(c.moveToFirst()) {
+            client = convertToObject(c);
+        }
+        c.close();
+
+        return client;
+    }
+
+
+    public List<Client> get(){
+        Cursor c = db.query(getTable(), getColumns(), null, null, null, null, Client.COLUMN_NAME);
+        c.moveToFirst();
+
+        List<Client> objectLis = new ArrayList<Client>();
+
+        if (c.moveToFirst()) {
+            do {
+                Client object = convertToObject(c);
+                objectLis.add(object);
+            } while (c.moveToNext());
+        }
+        return objectLis;
     }
 }
