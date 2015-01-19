@@ -35,7 +35,7 @@ import br.com.douglas.flat.view.activity.MainActivity;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class ClientFragment extends Fragment implements AbsListView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class ClientFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     /**
      * The fragment argument representing the section number for this
@@ -107,8 +107,6 @@ public class ClientFragment extends Fragment implements AbsListView.OnItemClickL
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
-
-        mListView.setOnItemLongClickListener(this);
 
         Button fab = (Button) view.findViewById(R.id.fabbutton);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -186,29 +184,6 @@ public class ClientFragment extends Fragment implements AbsListView.OnItemClickL
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
-    }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
-        builder.setMessage("Deseja realemnte excluir " + clients.get(position) + "?")
-                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        service.delete(clients.get(position));
-                        updateListView();
-                    }
-                })
-                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                    }
-                })
-                .setTitle("Atenção");
-        // Create the AlertDialog object and return it
-        builder.create().show();
-
-        Toast.makeText(getActivity(), "TEste  " + clients.get(position), Toast.LENGTH_SHORT ).show();
-        return false;
     }
 
     private void updateListView(){

@@ -16,5 +16,8 @@
     <string name="address">Endereço</string>
     <string name="phone">Fone</string>
     <string name="title_activity_client_detail">Cliente</string>
+    <string name="action_edit">Editar</string>
+    <string name="action_delete">Excluir</string>
+    <string name="create_sale">Criar venda</string>
 
 </resources>

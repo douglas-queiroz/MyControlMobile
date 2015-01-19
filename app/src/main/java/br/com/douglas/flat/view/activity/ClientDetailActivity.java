@@ -1,16 +1,21 @@
 package br.com.douglas.flat.view.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import br.com.douglas.flat.R;
 import br.com.douglas.flat.model.Client;
+import br.com.douglas.flat.service.ClientService;
 
 public class ClientDetailActivity extends ActionBarActivity {
 
+    private ClientService service;
     private Client client;
     private TextView txtName;
     private TextView txtPhone;
@@ -30,6 +35,8 @@ public class ClientDetailActivity extends ActionBarActivity {
         txtName.setText(client.getName());
         txtPhone.setText(client.getPhone());
         txtAddress.setText(client.getAddress());
+
+        service = new ClientService(this);
     }
 
 
@@ -48,7 +55,34 @@ public class ClientDetailActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_edit) {
+            Intent intent = new Intent(this, ClientActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("client", client);
+            intent.putExtras(bundle);
+
+            finish();
+
+            startActivity(intent);
+            return true;
+        }else if(id == R.id.action_delete){
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+            builder.setMessage("Deseja realemnte excluir " + client + "?")
+                    .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            service.delete(client);
+                            onBackPressed();
+                        }
+                    })
+                    .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                        }
+                    })
+                    .setTitle("Atenção");
+            // Create the AlertDialog object and return it
+            builder.create().show();
+
             return true;
         }
 

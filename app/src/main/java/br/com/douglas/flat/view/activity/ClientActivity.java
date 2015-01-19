@@ -19,6 +19,7 @@ public class ClientActivity extends ActionBarActivity {
     private EditText edtName;
     private EditText edtPhone;
     private EditText edtAddress;
+    private Client client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,15 @@ public class ClientActivity extends ActionBarActivity {
         edtAddress = (EditText) findViewById(R.id.edtAddress);
 
         clientService = new ClientService(this);
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            client = (Client) bundle.getSerializable("client");
+
+            edtName.setText(client.getName());
+            edtPhone.setText(client.getPhone());
+            edtAddress.setText(client.getAddress());
+        }
     }
 
 
@@ -59,7 +69,9 @@ public class ClientActivity extends ActionBarActivity {
     }
 
     public void save(){
-        Client client = new Client();
+        if(client == null) {
+            client = new Client();
+        }
         client.setName(edtName.getText().toString());
         client.setPhone(edtPhone.getText().toString());
         client.setAddress(edtAddress.getText().toString());
