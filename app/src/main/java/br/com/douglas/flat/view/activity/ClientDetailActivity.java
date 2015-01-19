@@ -6,8 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import br.com.douglas.flat.R;
-
-
 public class ClientDetailActivity extends ActionBarActivity {
 
     @Override
