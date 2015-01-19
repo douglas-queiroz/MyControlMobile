@@ -48,10 +48,10 @@ public abstract class AbstractDAO<T extends AbstractModel> {
         c.moveToFirst();
 
         List<T> objectLis = new ArrayList<T>();
-        while(c.moveToNext()){
+        do{
             T object = convertToObject(c);
             objectLis.add(object);
-        }
+        }while(c.moveToNext());
 
         return objectLis;
     }
