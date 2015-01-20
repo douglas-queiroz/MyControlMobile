@@ -5,7 +5,8 @@ package br.com.douglas.flat.model;
  */
 public class Contact extends AbstractModel {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -1308562566681545399L;
+
     public static final String TABLE = "contacts";
     public static final String COLUMN_CLIENT = "client_id";
     public static final String COLUMN_NUMBER = "number";

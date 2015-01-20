@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class Client extends AbstractModel {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -7210088324642280786L;
 
     public static final String TABLE = "clients";
     public static final String COLUMN_NAME = "name";
