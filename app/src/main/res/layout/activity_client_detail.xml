@@ -10,37 +10,25 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView android:text="@string/name" android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView android:text="@string/phone" android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView android:text="@string/address" android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        android:orientation="vertical"
+        android:id="@+id/description_layout">
+        <TextView android:text="@string/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingLeft="1dp">
+        android:layout_marginLeft="10dp"
+        android:id="@+id/values_layout">
         <TextView
             android:id="@+id/txtName"
+            android:textSize="20sp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Testando o teste testtado"/>
-        <TextView
-            android:id="@+id/txtPhone"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Testando o teste testtado"/>
-        <TextView
-            android:id="@+id/txtAddress"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Testando o teste testtado"/>
+            android:text="Nome do Cliente"/>
     </LinearLayout>
 </LinearLayout>

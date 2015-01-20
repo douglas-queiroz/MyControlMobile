@@ -31,12 +31,19 @@ public class ClientService extends AbstractService<Client>{
         for (int i = 0; i < clients.size(); i++) {
             Client client = clients.get(i);
             if(dao.get(client.getName()) == null) {
-                client.setId((int) super.save(client));
-                for (int j = 0; j < client.getContacts().size(); j++) {
-                    Contact contact = client.getContacts().get(j);
-                    contactService.save(contact);
-                }
+                this.save(client);
             }
         }
+    }
+
+    @Override
+    public long save(Client client) {
+        client.setId((int) super.save(client));
+
+        for (int j = 0; j < client.getContacts().size(); j++) {
+            Contact contact = client.getContacts().get(j);
+            contactService.save(contact);
+        }
+        return client.getId();
     }
 }

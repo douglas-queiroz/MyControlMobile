@@ -6,11 +6,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import br.com.douglas.flat.R;
 import br.com.douglas.flat.model.Client;
+import br.com.douglas.flat.model.Contact;
 import br.com.douglas.flat.service.ClientService;
 import br.com.douglas.flat.service.ContactService;
 
@@ -20,8 +23,8 @@ public class ClientDetailActivity extends ActionBarActivity {
     private ContactService contactService;
     private Client client;
     private TextView txtName;
-    private TextView txtPhone;
-    private TextView txtAddress;
+    private LinearLayout descriptionLayout;
+    private LinearLayout valuesLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,20 +32,31 @@ public class ClientDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_client_detail);
 
         client = (Client) getIntent().getExtras().getSerializable("client");
-
         txtName = (TextView) findViewById(R.id.txtName);
-        txtPhone = (TextView) findViewById(R.id.txtPhone);
-        txtAddress = (TextView) findViewById(R.id.txtAddress);
+        descriptionLayout = (LinearLayout) findViewById(R.id.description_layout);
+        valuesLayout = (LinearLayout) findViewById(R.id.values_layout);
 
         service = new ClientService(this);
         contactService = new ContactService(this);
         client.setContacts(contactService.get(client));
 
         txtName.setText(client.getName());
+        for (int i = 0; i < client.getContacts().size(); i++) {
+            Contact contact = client.getContacts().get(i);
 
-        if(!client.getContacts().isEmpty())
-            txtPhone.setText(client.getContacts().get(0).getNumber());
-        txtAddress.setText(client.getAddress());
+            TextView txtDescription = new TextView(this);
+            txtDescription.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            txtDescription.setText("Fone:");
+            txtDescription.setTextSize(20);
+            descriptionLayout.addView(txtDescription);
+
+            TextView txtContact = new TextView(this);
+            txtContact.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            txtContact.setText(contact.getNumber());
+            txtContact.setTextSize(20);
+            valuesLayout.addView(txtContact);
+
+        }
     }
 
 
