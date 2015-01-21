@@ -16,9 +16,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.ParseException;
 
 import br.com.douglas.flat.R;
 import br.com.douglas.flat.helper.DateHelper;
+import br.com.douglas.flat.helper.NumberHelper;
 import br.com.douglas.flat.model.Client;
 import br.com.douglas.flat.model.Sale;
 
@@ -31,6 +35,7 @@ public class SaleActivity extends ActionBarActivity {
     private TextView txtTotal;
     private LinearLayout layoutItens;
     private Button btnAddItem;
+    private int amountItens = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,19 +106,44 @@ public class SaleActivity extends ActionBarActivity {
         edtProdut.setAdapter(adapter);
         layoutItens.addView(edtProdut);
 
-        final LinearLayout layout = new LinearLayout(this);
-        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layout.setOrientation(layout.HORIZONTAL);
+        final LinearLayout layoutAmount = new LinearLayout(this);
+        layoutAmount.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        layoutAmount.setOrientation(layoutAmount.HORIZONTAL);
 
         final EditText edtAmount = new EditText(this);
         edtAmount.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
         edtAmount.setHint("Quantidade");
-        layout.addView(edtAmount);
+        layoutAmount.addView(edtAmount);
+
+        final EditText edtValue = new EditText(this);
+        edtValue.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        edtValue.setHint("Valor");
+        layoutAmount.addView(edtValue);
+
+        final LinearLayout layoutSubtotal = new LinearLayout(this);
+        layoutSubtotal.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        layoutSubtotal.setOrientation(layoutSubtotal.HORIZONTAL);
+        layoutSubtotal.setPadding(0, 0, 0, 20);
 
         final EditText edtSubtotal = new EditText(this);
         edtSubtotal.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
         edtSubtotal.setHint("Subtotal");
-        layout.addView(edtSubtotal);
+        edtSubtotal.setEnabled(false);
+        layoutSubtotal.addView(edtSubtotal);
+
+        Button btnRemove = new Button(this);
+        btnRemove.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.5f));
+        btnRemove.setText("X");
+        btnRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeItem(edtProdut, layoutAmount, layoutSubtotal);
+            }
+        });
+        layoutSubtotal.addView(btnRemove);
+
+        layoutItens.addView(layoutAmount);
+        layoutItens.addView(layoutSubtotal);
 
         edtAmount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -122,7 +152,7 @@ public class SaleActivity extends ActionBarActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                edtSubtotal.setText(s);
+                updateSubTotals(edtAmount, edtValue, edtSubtotal);
             }
 
             @Override
@@ -130,7 +160,7 @@ public class SaleActivity extends ActionBarActivity {
             }
         });
 
-        edtProdut.addTextChangedListener(new TextWatcher() {
+        edtValue.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -138,8 +168,7 @@ public class SaleActivity extends ActionBarActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                edtAmount.setText("1");
-                edtSubtotal.setText("R$ 10,00");
+                updateSubTotals(edtAmount, edtValue, edtSubtotal);
             }
 
             @Override
@@ -148,22 +177,44 @@ public class SaleActivity extends ActionBarActivity {
             }
         });
 
-        Button btnRemove = new Button(this);
-        btnRemove.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.5f));
-        btnRemove.setText("X");
-        btnRemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeItem(edtProdut, layout);
-            }
-        });
-        layout.addView(btnRemove);
-
-        layoutItens.addView(layout);
+        amountItens ++;
     }
 
-    private void removeItem(AutoCompleteTextView edtProdut, LinearLayout layoutAmount){
+    private void removeItem(AutoCompleteTextView edtProdut, LinearLayout layoutAmount, LinearLayout layoutSubtotal){
         layoutItens.removeView(edtProdut);
+        layoutItens.removeView(layoutSubtotal);
         layoutItens.removeView(layoutAmount);
+        amountItens --;
+
+        updateTotal();
+    }
+
+    private void updateSubTotals(EditText edtAmount, EditText edtPrice, EditText edtSubTotal){
+        try {
+            double amount = NumberHelper.parseDouble(edtAmount.getText().toString());
+            double price = NumberHelper.parseDouble(edtPrice.getText().toString());
+            double subTotal = amount * price;
+            edtSubTotal.setText(NumberHelper.parseString(subTotal));
+            updateTotal();
+        }catch (Exception e){
+
+        }
+    }
+
+    private void updateTotal(){
+        try {
+            double total = 0;
+            for (int i = 0; i < amountItens; i++) {
+                LinearLayout layoutSubTotal = (LinearLayout) layoutItens.getChildAt(((i+1) * 3) - 1);
+                EditText edtSub = (EditText) layoutSubTotal.getChildAt(0);
+                double sub = 0;
+                    sub = NumberHelper.parseDouble(edtSub.getText().toString());
+                total += sub;
+            }
+
+            txtTotal.setText(NumberHelper.parseString(total));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
