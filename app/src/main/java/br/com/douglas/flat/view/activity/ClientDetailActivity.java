@@ -1,12 +1,15 @@
 package br.com.douglas.flat.view.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,22 +26,38 @@ public class ClientDetailActivity extends ActionBarActivity {
     private ContactService contactService;
     private Client client;
     private TextView txtName;
+    private Button btnCreateSale;
     private LinearLayout descriptionLayout;
     private LinearLayout valuesLayout;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_detail);
+        context = this;
 
         client = (Client) getIntent().getExtras().getSerializable("client");
         txtName = (TextView) findViewById(R.id.txtName);
         descriptionLayout = (LinearLayout) findViewById(R.id.description_layout);
         valuesLayout = (LinearLayout) findViewById(R.id.values_layout);
+        btnCreateSale = (Button) findViewById(R.id.btn_create_sale);
 
         service = new ClientService(this);
         contactService = new ContactService(this);
         client.setContacts(contactService.get(client));
+
+        btnCreateSale.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SaleActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("client", client);
+                intent.putExtras(bundle);
+
+                context.startActivity(intent);
+            }
+        });
 
         txtName.setText(client.getName());
         for (int i = 0; i < client.getContacts().size(); i++) {

@@ -27,7 +27,7 @@
             android:label="@string/title_activity_client_detail" >
         </activity>
         <activity
-            android:name=".SaleActivity"
+            android:name=".view.activity.SaleActivity"
             android:label="@string/title_activity_sale" >
         </activity>
     </application>

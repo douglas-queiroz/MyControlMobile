@@ -5,30 +5,47 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="br.com.douglas.flat.view.activity.ClientDetailActivity"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/description_layout">
-        <TextView android:text="@string/name"
+        android:orientation="horizontal">
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20sp"/>
+            android:orientation="vertical"
+            android:id="@+id/description_layout">
+            <TextView android:text="@string/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/values_layout">
+            <TextView
+                android:id="@+id/txtName"
+                android:textSize="20sp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Nome do Cliente"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/values_layout">
-        <TextView
-            android:id="@+id/txtName"
-            android:textSize="20sp"
+        android:orientation="horizontal">
+        <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Nome do Cliente"/>
+            android:id="@+id/btn_create_sale"
+            android:text="Criar Venda"/>
     </LinearLayout>
+
 </LinearLayout>

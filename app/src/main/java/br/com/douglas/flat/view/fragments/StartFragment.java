@@ -95,32 +95,32 @@ public class StartFragment extends Fragment{
                         if (hasPhone.equalsIgnoreCase("1")) {
                             Cursor phones = activity.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
                                     ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
-                            phones.moveToFirst();
-                            do {
-                                String cId = phones.getString(phones.getColumnIndex(ContactsContract.Contacts._ID));
-                                String cNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                                String nameContact = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
+                            if(phones.moveToFirst()){
+                                do {
+                                    String cNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                    String nameContact = c.getString(c.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME));
 
-                                Client client = null;
+                                    Client client = null;
 
-                                if (!clients.isEmpty() && clients.get(clients.size()-1).getName().equals(nameContact)){
-                                    client = clients.get(clients.size() -1);
-                                }else{
-                                    client = new Client();
-                                }
+                                    if (!clients.isEmpty() && clients.get(clients.size()-1).getName().equals(nameContact)){
+                                        client = clients.get(clients.size() -1);
+                                    }else{
+                                        client = new Client();
+                                    }
 
-                                client.setName(nameContact);
-                                Contact contact = new Contact();
-                                contact.setNumber(cNumber);
-                                contact.setClient(client);
-                                client.getContacts().add(contact);
+                                    client.setName(nameContact);
+                                    Contact contact = new Contact();
+                                    contact.setNumber(cNumber);
+                                    contact.setClient(client);
+                                    client.getContacts().add(contact);
 
-                                clients.add(client);
-                            }while(phones.moveToNext());
-                            phones.close();
+                                    clients.add(client);
+                                }while(phones.moveToNext());
+                            }
+
                         }
                     }while (c.moveToNext());
-                    c.close();
+
                 }
 
                 clientService.save(clients);

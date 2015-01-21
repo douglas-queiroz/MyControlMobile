@@ -37,6 +37,9 @@ public class SaleDAO extends AbstractDAO<Sale> {
             int columnId = cursor.getColumnIndex(Sale.COLUMN_ID);
             sale.setId(cursor.getInt(columnId));
 
+            columnId = cursor.getColumnIndex(Sale.COLUMN_CLIENT_ID);
+            sale.getClient().setId(cursor.getInt(columnId));
+
             columnId = cursor.getColumnIndex(Sale.COLUMN_DATE);
             sale.setDate(DateHelper.getDate(cursor.getString(columnId)));
 
