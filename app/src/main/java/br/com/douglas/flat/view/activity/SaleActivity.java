@@ -1,10 +1,20 @@
 package br.com.douglas.flat.view.activity;
 
+import android.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import br.com.douglas.flat.R;
@@ -19,6 +29,8 @@ public class SaleActivity extends ActionBarActivity {
     private TextView txtClient;
     private TextView txtDate;
     private TextView txtTotal;
+    private LinearLayout layoutItens;
+    private Button btnAddItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +41,21 @@ public class SaleActivity extends ActionBarActivity {
 
         loadComponets();
         loadInformations();
+
+        btnAddItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addItem();
+            }
+        });
     }
 
     private void loadComponets(){
         txtClient = (TextView) findViewById(R.id.txt_name);
         txtDate = (TextView) findViewById(R.id.txt_date);
         txtTotal = (TextView) findViewById(R.id.txt_total);
+        layoutItens = (LinearLayout) findViewById(R.id.layout_itens);
+        btnAddItem = (Button) findViewById(R.id.btn_add_item);
     }
 
     private void loadInformations(){
@@ -64,5 +85,85 @@ public class SaleActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    String[] arr = { "MS SQL SERVER", "MySQL", "Oracle" };
+
+    private void addItem(){
+
+        ArrayAdapter adapter = new ArrayAdapter
+                (this,android.R.layout.select_dialog_item, arr);
+
+        final AutoCompleteTextView edtProdut = new AutoCompleteTextView(this);
+        edtProdut.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        edtProdut.setHint("Produto");
+        edtProdut.setThreshold(1);
+        edtProdut.setAdapter(adapter);
+        layoutItens.addView(edtProdut);
+
+        final LinearLayout layout = new LinearLayout(this);
+        layout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        layout.setOrientation(layout.HORIZONTAL);
+
+        final EditText edtAmount = new EditText(this);
+        edtAmount.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        edtAmount.setHint("Quantidade");
+        layout.addView(edtAmount);
+
+        final EditText edtSubtotal = new EditText(this);
+        edtSubtotal.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+        edtSubtotal.setHint("Subtotal");
+        layout.addView(edtSubtotal);
+
+        edtAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                edtSubtotal.setText(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        edtProdut.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                edtAmount.setText("1");
+                edtSubtotal.setText("R$ 10,00");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        Button btnRemove = new Button(this);
+        btnRemove.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1.5f));
+        btnRemove.setText("X");
+        btnRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeItem(edtProdut, layout);
+            }
+        });
+        layout.addView(btnRemove);
+
+        layoutItens.addView(layout);
+    }
+
+    private void removeItem(AutoCompleteTextView edtProdut, LinearLayout layoutAmount){
+        layoutItens.removeView(edtProdut);
+        layoutItens.removeView(layoutAmount);
     }
 }

@@ -28,7 +28,8 @@
         </activity>
         <activity
             android:name=".view.activity.SaleActivity"
-            android:label="@string/title_activity_sale" >
+            android:label="@string/title_activity_sale"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
