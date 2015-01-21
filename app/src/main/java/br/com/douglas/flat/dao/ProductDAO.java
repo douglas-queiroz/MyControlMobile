@@ -15,6 +15,19 @@ public class ProductDAO extends AbstractDAO<Product> {
         super(context);
     }
 
+    public Product get(String description){
+        String selection = Product.COLUMN_DESCRIPTION + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(description) };
+        Cursor c = db.query(getTable(), getColumns(), selection, selectionArgs, null, null, null);
+
+        Product product = null;
+        if(c.moveToFirst()){
+            product = convertToObject(c);
+        }
+
+        return product;
+    }
+
     @Override
     protected ContentValues convertToContent(Product object) {
         ContentValues values = new ContentValues();

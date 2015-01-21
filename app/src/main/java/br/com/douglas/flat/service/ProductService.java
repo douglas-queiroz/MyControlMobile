@@ -17,6 +17,10 @@ public class ProductService extends AbstractService<Product>{
         dao = new ProductDAO(context);
     }
 
+    public Product get(String description){
+        return dao.get(description);
+    }
+
     @Override
     public AbstractDAO getDao() {
         return dao;

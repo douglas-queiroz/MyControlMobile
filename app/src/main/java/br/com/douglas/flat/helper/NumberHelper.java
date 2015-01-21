@@ -12,7 +12,7 @@ public class NumberHelper {
     private static DecimalFormat formato = new DecimalFormat("#,##0.00");
 
     public static String parseString(double value){
-        return currency.getSymbol() + formato.format(value);
+        return formato.format(value);
     }
 
     public static Double parseDouble(String value) throws ParseException, ClassCastException {

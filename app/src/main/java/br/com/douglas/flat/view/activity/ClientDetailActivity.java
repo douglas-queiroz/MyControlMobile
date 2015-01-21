@@ -14,7 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import br.com.douglas.flat.R;
+import br.com.douglas.flat.helper.NumberHelper;
 import br.com.douglas.flat.model.Client;
 import br.com.douglas.flat.model.Contact;
 import br.com.douglas.flat.service.ClientService;
@@ -26,6 +29,7 @@ public class ClientDetailActivity extends ActionBarActivity {
     private ContactService contactService;
     private Client client;
     private TextView txtName;
+    private TextView txtSaldo;
     private Button btnCreateSale;
     private LinearLayout descriptionLayout;
     private LinearLayout valuesLayout;
@@ -39,6 +43,7 @@ public class ClientDetailActivity extends ActionBarActivity {
 
         client = (Client) getIntent().getExtras().getSerializable("client");
         txtName = (TextView) findViewById(R.id.txtName);
+        txtSaldo = (TextView) findViewById(R.id.txt_saldo);
         descriptionLayout = (LinearLayout) findViewById(R.id.description_layout);
         valuesLayout = (LinearLayout) findViewById(R.id.values_layout);
         btnCreateSale = (Button) findViewById(R.id.btn_create_sale);
@@ -54,12 +59,21 @@ public class ClientDetailActivity extends ActionBarActivity {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("client", client);
                 intent.putExtras(bundle);
-
+                finish();
                 context.startActivity(intent);
             }
         });
 
+        loadInformations();
+        loadContacts();
+    }
+
+    public void loadInformations(){
         txtName.setText(client.getName());
+        txtSaldo.setText(NumberHelper.parseString(client.getSale()));
+    }
+
+    private void loadContacts(){
         for (int i = 0; i < client.getContacts().size(); i++) {
             Contact contact = client.getContacts().get(i);
 
@@ -77,7 +91,6 @@ public class ClientDetailActivity extends ActionBarActivity {
 
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
