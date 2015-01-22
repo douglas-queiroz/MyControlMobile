@@ -50,7 +50,7 @@ public class ClientActivity extends ActionBarActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             client = (Client) bundle.getSerializable("client");
-
+            client.setContacts(contactService.get(client));
             edtName.setText(client.getName());
         }
 

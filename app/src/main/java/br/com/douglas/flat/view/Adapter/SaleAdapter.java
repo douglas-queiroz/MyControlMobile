@@ -37,8 +37,13 @@ public class SaleAdapter extends ArrayAdapter<Sale> {
         Sale p = getItem(position);
 
         if (p != null) {
+            TextView tt0 = (TextView) v.findViewById(R.id.txt_client);
             TextView tt1 = (TextView) v.findViewById(R.id.categoryId);
             TextView tt3 = (TextView) v.findViewById(R.id.description);
+
+            if(tt0 != null){
+                tt0.setText(p.getClient().getName());
+            }
 
             if (tt1 != null) {
 

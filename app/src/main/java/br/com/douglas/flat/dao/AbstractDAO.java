@@ -11,6 +11,7 @@ import java.util.List;
 import br.com.douglas.flat.helper.FlatDBHelper;
 import br.com.douglas.flat.model.AbstractModel;
 import br.com.douglas.flat.model.Client;
+import br.com.douglas.flat.model.Product;
 
 /**
  * Created by douglas on 16/01/15.
@@ -56,6 +57,19 @@ public abstract class AbstractDAO<T extends AbstractModel> {
             } while (c.moveToNext());
         }
         return objectLis;
+    }
+
+    public T get(int Id){
+        String selection = T.COLUMN_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(Id) };
+        Cursor c = db.query(getTable(), getColumns(), selection, selectionArgs, null, null, null);
+
+        T object = null;
+
+        if (c.moveToFirst()) {
+            object = convertToObject(c);
+        }
+        return object;
     }
 
     protected abstract ContentValues convertToContent(T object);

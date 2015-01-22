@@ -29,5 +29,9 @@ public abstract class AbstractService<T extends AbstractModel> {
         return getDao().get();
     }
 
+    public T get(int Id){
+        return (T) getDao().get(Id);
+    }
+
     public abstract AbstractDAO getDao();
 }

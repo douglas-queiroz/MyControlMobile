@@ -35,6 +35,7 @@ public class ClientDetailActivity extends ActionBarActivity {
     private LinearLayout valuesLayout;
     private Context context;
     private Button btnDisplaySales;
+    public static final String ARG_CLIENT = "client";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class ClientDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_client_detail);
         context = this;
 
-        client = (Client) getIntent().getExtras().getSerializable("client");
+        client = (Client) getIntent().getExtras().getSerializable(ARG_CLIENT);
         txtName = (TextView) findViewById(R.id.txtName);
         txtSaldo = (TextView) findViewById(R.id.txt_saldo);
         descriptionLayout = (LinearLayout) findViewById(R.id.description_layout);
@@ -69,12 +70,11 @@ public class ClientDetailActivity extends ActionBarActivity {
         btnDisplaySales.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, SaleListActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("client", client);
-                intent.putExtras(bundle);
+                getIntent().putExtras(bundle);
+                setResult(10, getIntent());
                 finish();
-                context.startActivity(intent);
             }
         });
 

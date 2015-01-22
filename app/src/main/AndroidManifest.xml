@@ -11,7 +11,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".view.activity.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,11 +21,13 @@
         </activity>
         <activity
             android:name=".view.activity.ClientActivity"
-            android:label="@string/title_activity_client" >
+            android:label="@string/title_activity_client"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".view.activity.ClientDetailActivity"
-            android:label="@string/title_activity_client_detail" >
+            android:label="@string/title_activity_client_detail"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".view.activity.SaleActivity"
@@ -33,7 +36,8 @@
         </activity>
         <activity
             android:name=".view.activity.SaleListActivity"
-            android:label="@string/title_activity_sale_list" >
+            android:label="@string/title_activity_sale_list"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

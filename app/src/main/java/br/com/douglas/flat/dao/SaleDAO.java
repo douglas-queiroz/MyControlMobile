@@ -75,7 +75,11 @@ public class SaleDAO extends AbstractDAO<Sale> {
 
         List<Sale> sales = new ArrayList<Sale>();
         if(c.moveToFirst()){
-            sales.add(convertToObject(c));
+            do {
+                Sale sale = convertToObject(c);
+                sale.setClient(client);
+                sales.add(sale);
+            }while (c.moveToNext());
         }
 
         return sales;

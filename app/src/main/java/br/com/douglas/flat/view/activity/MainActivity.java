@@ -1,5 +1,6 @@
 package br.com.douglas.flat.view.activity;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentManager;
@@ -8,9 +9,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 
+import java.util.Stack;
+
+import br.com.douglas.flat.view.fragments.ClientDetailFragment;
 import br.com.douglas.flat.view.fragments.ClientFragment;
 import br.com.douglas.flat.view.fragments.NavigationDrawerFragment;
 import br.com.douglas.flat.R;
+import br.com.douglas.flat.view.fragments.SaleItemFragment;
 import br.com.douglas.flat.view.fragments.StartFragment;
 
 
@@ -22,6 +27,9 @@ public class MainActivity extends ActionBarActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+
+    private Stack<Fragment> stackFragment = new Stack<Fragment>();
+    private Fragment currentyFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -47,17 +55,27 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
-
+        stackFragment.clear();
+        Bundle args = new Bundle();
+        Fragment fragment;
         switch (position){
             case 0:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, StartFragment.newInstance(position + 1))
-                        .commit();
+                fragment = new StartFragment();
+                args.putInt(StartFragment.ARG_SECTION_NUMBER, position + 1);
+                fragment.setArguments(args);
+                startFragment(fragment);
                 break;
             case 1:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, ClientFragment.newInstance("Douglas", "Queiroz", position + 1))
-                        .commit();
+                fragment = new ClientFragment();
+                args.putInt(ClientFragment.ARG_SECTION_NUMBER, position + 1);
+                fragment.setArguments(args);
+                startFragment(fragment);
+                break;
+            case 2:
+                fragment = new SaleItemFragment();
+                args.putInt(SaleItemFragment.ARG_SECTION_NUMBER, position + 1);
+                fragment.setArguments(args);
+                startFragment(fragment);
                 break;
 
         }
@@ -73,7 +91,7 @@ public class MainActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_client);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.title_sales);
                 break;
         }
     }
@@ -92,7 +110,12 @@ public class MainActivity extends ActionBarActivity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
+            if(currentyFragment instanceof ClientDetailFragment){
+                getMenuInflater().inflate(R.menu.menu_client_detail, menu);
+            }else {
+                getMenuInflater().inflate(R.menu.main, menu);
+            }
+
             restoreActionBar();
             return true;
         }
@@ -106,8 +129,9 @@ public class MainActivity extends ActionBarActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(currentyFragment != null){
+            return currentyFragment.onOptionsItemSelected(item);
+        }else if (id == R.id.action_settings) {
             return true;
         }
 
@@ -117,5 +141,41 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onFragmentInteraction(String id) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(stackFragment.empty()){
+            super.onBackPressed();
+        }else{
+            stackFragment.pop();
+            if(!stackFragment.isEmpty()) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, stackFragment.peek())
+                        .commit();
+            }else{
+                super.onBackPressed();
+            }
+        }
+    }
+
+    public void startFragment(Fragment fragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
+
+        invalidateOptionsMenu();
+        currentyFragment = fragment;
+        stackFragment.add(fragment);
+    }
+
+    @Override
+    protected void onResume() {
+        if (currentyFragment != null){
+            currentyFragment.onResume();
+        }
+        super.onResume();
     }
 }

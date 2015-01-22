@@ -30,7 +30,7 @@ public class StartFragment extends Fragment{
      * The fragment argument representing the section number for this
      * fragment.
      */
-    private static final String ARG_SECTION_NUMBER = "section_number";
+    public static final String ARG_SECTION_NUMBER = "section_number";
     private Button btnImport;
     private ClientService clientService;
 

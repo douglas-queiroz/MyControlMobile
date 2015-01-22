@@ -106,7 +106,7 @@ public class NavigationDrawerFragment extends Fragment {
                 new String[]{
                         getString(R.string.title_start),
                         getString(R.string.title_client),
-                        getString(R.string.title_section3),
+                        getString(R.string.title_sales),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;

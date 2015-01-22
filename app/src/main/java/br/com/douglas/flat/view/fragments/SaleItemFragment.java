@@ -1,30 +1,25 @@
 package br.com.douglas.flat.view.fragments;
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.douglas.flat.R;
+
 import br.com.douglas.flat.model.Client;
-import br.com.douglas.flat.service.ClientService;
-import br.com.douglas.flat.view.activity.ClientActivity;
-import br.com.douglas.flat.view.activity.ClientDetailActivity;
+import br.com.douglas.flat.model.Sale;
+import br.com.douglas.flat.service.SaleService;
+import br.com.douglas.flat.view.Adapter.SaleAdapter;
 import br.com.douglas.flat.view.activity.MainActivity;
 
 /**
@@ -36,20 +31,14 @@ import br.com.douglas.flat.view.activity.MainActivity;
  * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
  * interface.
  */
-public class ClientFragment extends Fragment implements AbsListView.OnItemClickListener {
-
-    /**
-     * The fragment argument representing the section number for this
-     * fragment.
-     */
-    public static final String ARG_SECTION_NUMBER = "section_number";
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private ClientService service;
-    private List<Client> clients = new ArrayList<Client>();
-    private View view;
+public class SaleItemFragment extends Fragment implements AbsListView.OnItemClickListener {
 
     private OnFragmentInteractionListener mListener;
+    private SaleService saleService;
+    private List<Sale> saleList;
+    private Client client;
+    public static final String ARG_CLIENT = "client";
+    public static final String ARG_SECTION_NUMBER = "section_number";
 
     /**
      * The fragment's ListView/GridView.
@@ -60,15 +49,21 @@ public class ClientFragment extends Fragment implements AbsListView.OnItemClickL
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-    private ListAdapter mAdapter;
+    private SaleAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
-    public static ClientFragment newInstance(String param1, String param2, int sectionNumber) {
-        ClientFragment fragment = new ClientFragment();
+    public static SaleItemFragment newInstance() {
+        SaleItemFragment fragment = new SaleItemFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
+        return fragment;
+    }
 
+    public static SaleItemFragment newInstance(Client client) {
+        SaleItemFragment fragment = new SaleItemFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("client", client);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -76,57 +71,46 @@ public class ClientFragment extends Fragment implements AbsListView.OnItemClickL
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ClientFragment() {
+    public SaleItemFragment() {
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        service = new ClientService(getActivity());
+        if (getArguments() != null) {
+            client = (Client) getArguments().getSerializable("client");
+        }
+
+        saleService = new SaleService(getActivity());
+        if(client ==null){
+            saleList = saleService.get();
+        }else{
+            saleList = saleService.get(client);
+        }
+        mAdapter = new SaleAdapter(getActivity(), saleList);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.view = inflater.inflate(R.layout.fragment_client, container, false);
+        View view = inflater.inflate(R.layout.fragment_saleitem, container, false);
 
-        updateListView();
+        // Set the adapter
+        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
-
-        Button fab = (Button) view.findViewById(R.id.fabbutton);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ClientActivity.class);
-                getActivity().startActivity(intent);
-            }
-        });
 
         return view;
     }
 
     @Override
-    public void onResume() {
-        updateListView();
-        super.onResume();
-    }
-
-    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         ((MainActivity) activity).onSectionAttached(
                 getArguments().getInt(ARG_SECTION_NUMBER));
-
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
     }
 
     @Override
@@ -138,11 +122,11 @@ public class ClientFragment extends Fragment implements AbsListView.OnItemClickL
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Fragment fragment = new ClientDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(ClientDetailFragment.ARG_CLIENT, clients.get(position));
-        fragment.setArguments(bundle);
-        ((MainActivity)getActivity()).startFragment(fragment);
+        if (null != mListener) {
+            // Notify the active callbacks interface (the activity, if the
+            // fragment is attached to one) that an item has been selected.
+
+        }
     }
 
     /**
@@ -173,18 +157,4 @@ public class ClientFragment extends Fragment implements AbsListView.OnItemClickL
         public void onFragmentInteraction(String id);
     }
 
-    private void updateListView(){
-        clients = service.get();
-        mAdapter = new ArrayAdapter<Client>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, clients);
-
-        // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 }
