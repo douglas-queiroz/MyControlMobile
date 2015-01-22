@@ -29,7 +29,11 @@
         <activity
             android:name=".view.activity.SaleActivity"
             android:label="@string/title_activity_sale"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".view.activity.SaleListActivity"
+            android:label="@string/title_activity_sale_list" >
         </activity>
     </application>
 

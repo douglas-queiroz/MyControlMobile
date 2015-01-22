@@ -69,12 +69,17 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/btn_create_sale"
             android:text="Criar Venda"/>
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_display_sales"
+            android:text="Visualizar Vendas"/>
     </LinearLayout>
 
 </LinearLayout>

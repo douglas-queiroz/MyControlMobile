@@ -2,6 +2,8 @@ package br.com.douglas.flat.service;
 
 import android.content.Context;
 
+import java.util.List;
+
 import br.com.douglas.flat.dao.AbstractDAO;
 import br.com.douglas.flat.dao.SaleDAO;
 import br.com.douglas.flat.model.Client;
@@ -22,6 +24,10 @@ public class SaleService extends AbstractService<Sale> {
         dao= new SaleDAO(context);
         saleItemService = new SaleItemService(context);
         clientService = new ClientService(context);
+    }
+
+    public List<Sale> get(Client client) {
+        return dao.get(client);
     }
 
     @Override

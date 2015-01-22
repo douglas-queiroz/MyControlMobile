@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import br.com.douglas.flat.helper.DateHelper;
+
 /**
  * Created by douglas on 20/01/15.
  */
@@ -68,5 +70,10 @@ public class Sale extends AbstractModel {
 
     public void setObs(String obs) {
         this.obs = obs;
+    }
+
+    @Override
+    public String toString() {
+        return DateHelper.getStringBr(this.date);
     }
 }

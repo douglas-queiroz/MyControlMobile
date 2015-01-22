@@ -34,6 +34,7 @@ public class ClientDetailActivity extends ActionBarActivity {
     private LinearLayout descriptionLayout;
     private LinearLayout valuesLayout;
     private Context context;
+    private Button btnDisplaySales;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class ClientDetailActivity extends ActionBarActivity {
         descriptionLayout = (LinearLayout) findViewById(R.id.description_layout);
         valuesLayout = (LinearLayout) findViewById(R.id.values_layout);
         btnCreateSale = (Button) findViewById(R.id.btn_create_sale);
+        btnDisplaySales = (Button) findViewById(R.id.btn_display_sales);
 
         service = new ClientService(this);
         contactService = new ContactService(this);
@@ -56,6 +58,18 @@ public class ClientDetailActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SaleActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("client", client);
+                intent.putExtras(bundle);
+                finish();
+                context.startActivity(intent);
+            }
+        });
+
+        btnDisplaySales.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, SaleListActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("client", client);
                 intent.putExtras(bundle);

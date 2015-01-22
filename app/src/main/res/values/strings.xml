@@ -20,5 +20,6 @@
     <string name="action_delete">Excluir</string>
     <string name="create_sale">Criar venda</string>
     <string name="title_activity_sale">Venda</string>
+    <string name="title_activity_sale_list">Lista de Vendas</string>
 
 </resources>
