@@ -45,6 +45,17 @@ public class SaleService extends AbstractService<Sale> {
     }
 
     @Override
+    public List<Sale> get() {
+        List<Sale> sales = super.get();
+        for (int i = 0; i < sales.size(); i++) {
+            Sale sale = sales.get(i);
+            sale.setClient(clientService.get(sale.getClient().getId()));
+        }
+
+        return sales;
+    }
+
+    @Override
     public AbstractDAO getDao() {
         return dao;
     }

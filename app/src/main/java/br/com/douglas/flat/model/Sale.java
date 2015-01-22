@@ -14,7 +14,7 @@ public class Sale extends AbstractModel {
     private static final long serialVersionUID = -3615441807018043077L;
 
     public static final String TABLE = "sales";
-    public static final String COLUMN_CLIENT_ID = "client";
+    public static final String COLUMN_CLIENT_ID = "client_id";
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_TOTAL = "total";
     public static final String COLUMN_OBS = "obs";
@@ -22,8 +22,8 @@ public class Sale extends AbstractModel {
             + COLUMN_ID + " INTEGER PRIMARY KEY,"
             + COLUMN_CLIENT_ID + " INTEGER,"
             + COLUMN_DATE + " TEXT,"
-            + COLUMN_TOTAL + " INTEGER,"
-            + COLUMN_OBS + " DECIMAL(10, 2))";
+            + COLUMN_TOTAL + " DECIMAL(10, 2),"
+            + COLUMN_OBS + " TEXT)";
     public static final String SQL_DELETE = "DROP TABLE IF EXISTS " + TABLE;
 
     private List<SaleItem> saleItems = new ArrayList<SaleItem>();
