@@ -56,6 +56,19 @@ public class SaleService extends AbstractService<Sale> {
     }
 
     @Override
+    public void delete(Sale object) {
+        super.delete(object);
+        for (int i = 0; i < object.getSaleItems().size(); i++) {
+            saleItemService.delete(object.getSaleItems().get(i));
+        }
+
+        Client client = object.getClient();
+        double sale = client.getSale();
+        client.setSale(sale + object.getTotal());
+        clientService.save(client);
+    }
+
+    @Override
     public AbstractDAO getDao() {
         return dao;
     }

@@ -31,13 +31,19 @@ import br.com.douglas.flat.model.Product;
 import br.com.douglas.flat.model.Sale;
 import br.com.douglas.flat.model.SaleItem;
 import br.com.douglas.flat.service.ProductService;
+import br.com.douglas.flat.service.SaleItemService;
 import br.com.douglas.flat.service.SaleService;
 
 
 public class SaleActivity extends ActionBarActivity {
 
-    private Sale sale = new Sale();
+    public static final String ARG_Sale = "sale";
+
+    private Sale sale;
     private SaleService service;
+    private ProductService productService;
+    private SaleItemService saleItemService;
+
     private TextView txtClient;
     private TextView txtDate;
     private TextView txtTotal;
@@ -46,16 +52,22 @@ public class SaleActivity extends ActionBarActivity {
     private int amountItens = 0;
     private HashMap<String, Product> products = new HashMap<String, Product>();
     private String[] strProducts;
-    private ProductService productService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sale);
         service = new SaleService(this);
+        saleItemService = new SaleItemService(this);
         productService = new ProductService(this);
-        Client client = (Client) getIntent().getExtras().getSerializable("client");
-        sale.setClient(client);
+
+        Bundle args = getIntent().getExtras();
+        sale = (Sale) args.getSerializable(ARG_Sale);
+        if(sale == null){
+            sale = new Sale();
+            Client client = (Client) args.getSerializable("client");
+            sale.setClient(client);
+        }
 
         loadComponets();
         loadInformations();
@@ -63,7 +75,7 @@ public class SaleActivity extends ActionBarActivity {
         btnAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addItem();
+                addItem(null);
             }
         });
     }
@@ -87,6 +99,13 @@ public class SaleActivity extends ActionBarActivity {
             Product product = productList.get(i);
             products.put(product.getDescription(), product);
             strProducts[i] = product.getDescription();
+        }
+
+        if(sale.getId() != 0){
+            for (int i = 0; i < sale.getSaleItems().size(); i++) {
+                SaleItem item = sale.getSaleItems().get(i);
+                addItem(item);
+            }
         }
     }
 
@@ -115,7 +134,7 @@ public class SaleActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void addItem(){
+    private void addItem(SaleItem item){
 
         ArrayAdapter adapter = new ArrayAdapter
                 (this,android.R.layout.select_dialog_item, strProducts);
@@ -220,6 +239,14 @@ public class SaleActivity extends ActionBarActivity {
             }
         });
 
+        if(item != null){
+            edtProdut.setText(item.getProduct().getDescription());
+            edtValue.setText(NumberHelper.parseString(item.getValue()));
+            edtAmount.setText(NumberHelper.parseString(item.getAmount()));
+            double subTotal = item.getValue() * item.getAmount();
+            edtSubtotal.setText(NumberHelper.parseString(subTotal));
+        }
+
         amountItens ++;
     }
 
@@ -291,18 +318,35 @@ public class SaleActivity extends ActionBarActivity {
                     product.setValue(NumberHelper.parseDouble(edtPrice.getText().toString()));
                 }
 
-                SaleItem item = new SaleItem();
-                item.setSale(sale);
-                item.setProduct(product);
-                item.setAmount(NumberHelper.parseDouble(edtAmoun.getText().toString()));
-                item.setValue(product.getValue());
+                if(sale.getSaleItems().size() > i){
+                    SaleItem item = sale.getSaleItems().get(i);
+                    item.setSale(sale);
+                    item.setProduct(product);
+                    item.setAmount(NumberHelper.parseDouble(edtAmoun.getText().toString()));
+                    item.setValue(product.getValue());
+                }else{
+                    SaleItem item = new SaleItem();
+                    item.setSale(sale);
+                    item.setProduct(product);
+                    item.setAmount(NumberHelper.parseDouble(edtAmoun.getText().toString()));
+                    item.setValue(product.getValue());
 
-                sale.getSaleItems().add(item);
+                    sale.getSaleItems().add(item);
+                }
 
-                service.save(sale);
 
-                Toast.makeText(this, "Venda salva com sucesso!", Toast.LENGTH_SHORT).show();
             }
+
+            while(sale.getSaleItems().size() > amountItens){
+                int lastItem = sale.getSaleItems().size() - 1;
+                SaleItem item = sale.getSaleItems().get(lastItem);
+                saleItemService.delete(item);
+                sale.getSaleItems().remove(lastItem);
+            }
+
+            service.save(sale);
+
+            Toast.makeText(this, "Venda salva com sucesso!", Toast.LENGTH_SHORT).show();
         } catch (ParseException e) {
             e.printStackTrace();
         }

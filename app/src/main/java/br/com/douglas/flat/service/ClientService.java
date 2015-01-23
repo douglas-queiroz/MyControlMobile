@@ -46,4 +46,13 @@ public class ClientService extends AbstractService<Client>{
         }
         return client.getId();
     }
+
+    @Override
+    public void delete(Client object) {
+        for (int i = 0; i < object.getContacts().size(); i++) {
+            Contact contact = object.getContacts().get(i);
+            contactService.delete(contact);
+        }
+        super.delete(object);
+    }
 }

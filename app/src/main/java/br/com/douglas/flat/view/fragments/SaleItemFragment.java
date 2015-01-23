@@ -16,6 +16,7 @@ import java.util.List;
 
 import br.com.douglas.flat.R;
 
+import br.com.douglas.flat.SaleDetailFragment;
 import br.com.douglas.flat.model.Client;
 import br.com.douglas.flat.model.Sale;
 import br.com.douglas.flat.service.SaleService;
@@ -39,40 +40,13 @@ public class SaleItemFragment extends Fragment implements AbsListView.OnItemClic
     private Client client;
     public static final String ARG_CLIENT = "client";
     public static final String ARG_SECTION_NUMBER = "section_number";
+    public MainActivity mContext;
 
     /**
      * The fragment's ListView/GridView.
      */
     private AbsListView mListView;
-
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
     private SaleAdapter mAdapter;
-
-    // TODO: Rename and change types of parameters
-    public static SaleItemFragment newInstance() {
-        SaleItemFragment fragment = new SaleItemFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public static SaleItemFragment newInstance(Client client) {
-        SaleItemFragment fragment = new SaleItemFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("client", client);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public SaleItemFragment() {
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +76,7 @@ public class SaleItemFragment extends Fragment implements AbsListView.OnItemClic
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
+        mContext = (MainActivity) this.getActivity();
 
         return view;
     }
@@ -122,11 +97,12 @@ public class SaleItemFragment extends Fragment implements AbsListView.OnItemClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
+        Fragment fragment = new SaleDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(SaleDetailFragment.ARG_SALE, saleList.get(position));
+        fragment.setArguments(bundle);
 
-        }
+        mContext.startFragment(fragment);
     }
 
     /**

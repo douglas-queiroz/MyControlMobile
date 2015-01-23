@@ -110,8 +110,8 @@ public class MainActivity extends ActionBarActivity
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            if(currentyFragment instanceof ClientDetailFragment){
-                getMenuInflater().inflate(R.menu.menu_client_detail, menu);
+            if(currentyFragment  != null){
+                currentyFragment.onCreateOptionsMenu(menu, getMenuInflater());
             }else {
                 getMenuInflater().inflate(R.menu.main, menu);
             }
@@ -150,10 +150,13 @@ public class MainActivity extends ActionBarActivity
         }else{
             stackFragment.pop();
             if(!stackFragment.isEmpty()) {
+                currentyFragment = stackFragment.peek();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, stackFragment.peek())
+                        .replace(R.id.container, currentyFragment)
                         .commit();
+
+                invalidateOptionsMenu();
             }else{
                 super.onBackPressed();
             }
@@ -175,6 +178,7 @@ public class MainActivity extends ActionBarActivity
     protected void onResume() {
         if (currentyFragment != null){
             currentyFragment.onResume();
+            invalidateOptionsMenu();
         }
         super.onResume();
     }

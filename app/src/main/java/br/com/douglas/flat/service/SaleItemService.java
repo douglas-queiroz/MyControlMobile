@@ -2,9 +2,12 @@ package br.com.douglas.flat.service;
 
 import android.content.Context;
 
+import java.util.List;
+
 import br.com.douglas.flat.dao.AbstractDAO;
 import br.com.douglas.flat.dao.SaleItemDAO;
 import br.com.douglas.flat.model.Product;
+import br.com.douglas.flat.model.Sale;
 import br.com.douglas.flat.model.SaleItem;
 
 /**
@@ -22,15 +25,26 @@ public class SaleItemService extends AbstractService<SaleItem> {
 
     @Override
     public long save(SaleItem object) {
-        long id = super.save(object);
         if(object.getProduct().getId() == 0){
-            productService.save(object.getProduct());
+            int id = (int) productService.save(object.getProduct());
+            object.getProduct().setId(id);
         }
-        return id;
+
+        return super.save(object);
     }
 
     @Override
     public AbstractDAO getDao() {
         return dao;
+    }
+
+    public List<SaleItem> get(Sale sale) {
+        List<SaleItem> itens = dao.get(sale);
+        for (int i = 0; i < itens.size(); i++) {
+            SaleItem item = itens.get(i);
+            item.setProduct(productService.get(item.getProduct().getId()));
+        }
+        
+        return itens;
     }
 }

@@ -4,6 +4,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.douglas.flat.model.Product;
+import br.com.douglas.flat.model.Sale;
 import br.com.douglas.flat.model.SaleItem;
 
 /**
@@ -56,5 +61,21 @@ public class SaleItemDAO extends AbstractDAO<SaleItem> {
     @Override
     protected String[] getColumns() {
         return new String[]{SaleItem.COLUMN_ID, SaleItem.COLUMN_SALE_ID, SaleItem.COLUMN_PRODUCT_ID, SaleItem.COLUMN_AMOUNT, SaleItem.COLUMN_VALUE};
+    }
+
+    public List<SaleItem> get(Sale sale) {
+        String selection = SaleItem.COLUMN_SALE_ID + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(sale.getId()) };
+        Cursor c = db.query(getTable(), getColumns(), selection, selectionArgs, null, null, null);
+
+        List<SaleItem> itens = new ArrayList<SaleItem>();
+        if(c.moveToFirst()){
+            do {
+                SaleItem item = convertToObject(c);
+                itens.add(item);
+            }while (c.moveToNext());
+        }
+
+        return itens;
     }
 }

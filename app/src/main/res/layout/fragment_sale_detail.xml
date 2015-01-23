@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="br.com.douglas.flat.SaleDetailFragment"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/description_layout">
+            <TextView android:text="Cliente :"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"/>
+
+            <TextView android:text="Date: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"/>
+
+            <TextView android:text="Total: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/values_layout">
+            <TextView
+                android:id="@+id/txt_client"
+                android:textSize="20sp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Nome do Cliente"/>
+
+            <TextView
+                android:id="@+id/txt_date"
+                android:textSize="20sp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="00/00/0000"/>
+
+            <TextView
+                android:id="@+id/txt_total"
+                android:textSize="20sp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="R$ 00,00"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#ff084d95"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/itens_layout">
+    </LinearLayout>
+
+</LinearLayout>
