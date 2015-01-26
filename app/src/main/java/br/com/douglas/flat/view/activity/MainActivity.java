@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 
 import java.util.Stack;
 
+import br.com.douglas.flat.PaymentListFragment;
 import br.com.douglas.flat.view.fragments.ClientDetailFragment;
 import br.com.douglas.flat.view.fragments.ClientFragment;
 import br.com.douglas.flat.view.fragments.NavigationDrawerFragment;
@@ -77,6 +78,10 @@ public class MainActivity extends ActionBarActivity
                 fragment.setArguments(args);
                 startFragment(fragment);
                 break;
+            case 3:
+                fragment = new PaymentListFragment();
+                startFragment(fragment);
+                break;
 
         }
 
@@ -92,6 +97,9 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 3:
                 mTitle = getString(R.string.title_sales);
+                break;
+            case 4:
+                mTitle = getString(R.string.title_payments);
                 break;
         }
     }

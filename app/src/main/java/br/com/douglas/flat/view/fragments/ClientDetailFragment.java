@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import br.com.douglas.flat.PaymentListFragment;
 import br.com.douglas.flat.R;
 import br.com.douglas.flat.helper.NumberHelper;
 import br.com.douglas.flat.model.Client;
@@ -56,6 +57,7 @@ public class ClientDetailFragment extends Fragment {
     private Button btnCreatePayment;
 
     private OnFragmentInteractionListener mListener;
+    private Button btnDisplayPayments;
 
     public static ClientDetailFragment newInstance(Client client) {
         ClientDetailFragment fragment = new ClientDetailFragment();
@@ -120,6 +122,7 @@ public class ClientDetailFragment extends Fragment {
         btnCreateSale = (Button) v.findViewById(R.id.btn_create_sale);
         btnDisplaySales = (Button) v.findViewById(R.id.btn_display_sales);
         btnCreatePayment = (Button) v.findViewById(R.id.btn_create_payment);
+        btnDisplayPayments = (Button) v.findViewById(R.id.btn_display_payments);
 
         loadInformations();
         loadContacts();
@@ -154,6 +157,17 @@ public class ClientDetailFragment extends Fragment {
                 bundle.putSerializable(PaymentActivity.ARG_CLIENT, mClient);
                 intent.putExtras(bundle);
                 context.startActivity(intent);
+            }
+        });
+
+        btnDisplayPayments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new PaymentListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(PaymentListFragment.ARG_CLIENT, mClient);
+                fragment.setArguments(bundle);
+                context.startFragment(fragment);
             }
         });
 

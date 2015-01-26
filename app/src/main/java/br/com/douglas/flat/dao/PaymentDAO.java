@@ -5,8 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.com.douglas.flat.helper.DateHelper;
+import br.com.douglas.flat.model.Client;
 import br.com.douglas.flat.model.Payment;
 
 /**
@@ -61,5 +64,22 @@ public class PaymentDAO extends AbstractDAO<Payment> {
     @Override
     protected String[] getColumns() {
         return new String[]{Payment.COLUMN_ID, Payment.COLUMN_CLIENT, Payment.COLUMN_DATE, Payment.COLUMN_VALUE};
+    }
+
+    public List<Payment> get(Client client) {
+        String selection = Payment.COLUMN_CLIENT + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(client.getId()) };
+        Cursor c = db.query(getTable(), getColumns(), selection, selectionArgs, null, null, null);
+
+        List<Payment> payments = new ArrayList<Payment>();
+        if(c.moveToFirst()){
+            do {
+                Payment payment = convertToObject(c);
+                payment.setClient(client);
+                payments.add(payment);
+            }while (c.moveToNext());
+        }
+
+        return payments;
     }
 }

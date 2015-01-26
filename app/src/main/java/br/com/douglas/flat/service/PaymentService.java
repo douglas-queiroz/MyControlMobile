@@ -2,6 +2,8 @@ package br.com.douglas.flat.service;
 
 import android.content.Context;
 
+import java.util.List;
+
 import br.com.douglas.flat.dao.AbstractDAO;
 import br.com.douglas.flat.dao.PaymentDAO;
 import br.com.douglas.flat.model.Client;
@@ -34,5 +36,20 @@ public class PaymentService extends AbstractService<Payment> {
     @Override
     public AbstractDAO getDao() {
         return dao;
+    }
+
+    public List<Payment> get(Client client) {
+        return dao.get(client);
+    }
+
+    @Override
+    public List<Payment> get() {
+        List<Payment> payments = super.get();
+        for (int i = 0; i < payments.size(); i++) {
+            Payment payment = payments.get(i);
+            payment.setClient(clientService.get(payment.getClient().getId()));
+        }
+
+        return payments;
     }
 }
