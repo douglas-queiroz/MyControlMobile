@@ -26,6 +26,7 @@ import br.com.douglas.flat.service.ClientService;
 import br.com.douglas.flat.service.ContactService;
 import br.com.douglas.flat.view.activity.ClientActivity;
 import br.com.douglas.flat.view.activity.MainActivity;
+import br.com.douglas.flat.view.activity.PaymentActivity;
 import br.com.douglas.flat.view.activity.SaleActivity;
 
 
@@ -52,6 +53,7 @@ public class ClientDetailFragment extends Fragment {
     private LinearLayout valuesLayout;
     private MainActivity context;
     private Button btnDisplaySales;
+    private Button btnCreatePayment;
 
     private OnFragmentInteractionListener mListener;
 
@@ -104,7 +106,7 @@ public class ClientDetailFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_client_detail, container, false);
         service = new ClientService(context);
@@ -117,6 +119,7 @@ public class ClientDetailFragment extends Fragment {
         valuesLayout = (LinearLayout) v.findViewById(R.id.values_layout);
         btnCreateSale = (Button) v.findViewById(R.id.btn_create_sale);
         btnDisplaySales = (Button) v.findViewById(R.id.btn_display_sales);
+        btnCreatePayment = (Button) v.findViewById(R.id.btn_create_payment);
 
         loadInformations();
         loadContacts();
@@ -140,6 +143,17 @@ public class ClientDetailFragment extends Fragment {
                 bundle.putSerializable(SaleItemFragment.ARG_CLIENT, mClient);
                 fragment.setArguments(bundle);
                 context.startFragment(fragment);
+            }
+        });
+
+        btnCreatePayment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, PaymentActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(PaymentActivity.ARG_CLIENT, mClient);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
             }
         });
 

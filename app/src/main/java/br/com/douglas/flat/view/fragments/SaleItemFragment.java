@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -16,7 +15,6 @@ import java.util.List;
 
 import br.com.douglas.flat.R;
 
-import br.com.douglas.flat.SaleDetailFragment;
 import br.com.douglas.flat.model.Client;
 import br.com.douglas.flat.model.Sale;
 import br.com.douglas.flat.service.SaleService;

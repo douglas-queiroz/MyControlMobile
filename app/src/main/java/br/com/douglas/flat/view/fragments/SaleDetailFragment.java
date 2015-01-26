@@ -1,4 +1,4 @@
-package br.com.douglas.flat;
+package br.com.douglas.flat.view.fragments;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -20,6 +20,7 @@ import org.w3c.dom.Text;
 
 import java.util.Date;
 
+import br.com.douglas.flat.R;
 import br.com.douglas.flat.helper.DateHelper;
 import br.com.douglas.flat.helper.NumberHelper;
 import br.com.douglas.flat.model.Sale;

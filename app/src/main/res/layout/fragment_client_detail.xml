@@ -81,6 +81,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/btn_display_sales"
             android:text="Visualizar Vendas"/>
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_create_payment"
+            android:text="Registrar Pagamento"/>
     </LinearLayout>
 
 </LinearLayout>
