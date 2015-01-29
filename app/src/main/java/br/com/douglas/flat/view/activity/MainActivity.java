@@ -11,8 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 
 import java.util.Stack;
 
-import br.com.douglas.flat.PaymentListFragment;
-import br.com.douglas.flat.view.fragments.ClientDetailFragment;
+import br.com.douglas.flat.view.fragments.PaymentListFragment;
 import br.com.douglas.flat.view.fragments.ClientFragment;
 import br.com.douglas.flat.view.fragments.NavigationDrawerFragment;
 import br.com.douglas.flat.R;

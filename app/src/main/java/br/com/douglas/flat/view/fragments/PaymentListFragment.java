@@ -1,4 +1,4 @@
-package br.com.douglas.flat;
+package br.com.douglas.flat.view.fragments;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -13,6 +13,7 @@ import android.widget.ListAdapter;
 
 import java.util.List;
 
+import br.com.douglas.flat.R;
 import br.com.douglas.flat.model.Client;
 import br.com.douglas.flat.model.Payment;
 import br.com.douglas.flat.service.PaymentService;
@@ -67,6 +68,11 @@ public class PaymentListFragment extends Fragment implements AdapterView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Fragment fragment = new PaymentDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(PaymentDetailFragment.ARG_PAYMENT, payments.get(position));
+        fragment.setArguments(bundle);
 
+        mContext.startFragment(fragment);
     }
 }

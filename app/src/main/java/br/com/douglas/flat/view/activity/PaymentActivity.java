@@ -21,11 +21,12 @@ import br.com.douglas.flat.service.PaymentService;
 public class PaymentActivity extends ActionBarActivity {
 
     public static final String ARG_CLIENT = "client";
+    public static final String ARG_PAYMENT = "payment";
 
     private EditText edtValue;
     private EditText edtDate;
 
-    private Payment payment = new Payment();
+    private Payment payment;
     private PaymentService service;
     private TextView txtClient;
 
@@ -33,8 +34,15 @@ public class PaymentActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
-        Client client = (Client) getIntent().getExtras().getSerializable(ARG_CLIENT);
-        payment.setClient(client);
+
+        Bundle bundle = getIntent().getExtras();
+
+        payment = (Payment) bundle.getSerializable(ARG_PAYMENT);
+        if(payment == null){
+            payment = new Payment();
+            Client client = (Client) bundle.getSerializable(ARG_CLIENT);
+            payment.setClient(client);
+        }
 
         service = new PaymentService(this);
 
@@ -47,7 +55,10 @@ public class PaymentActivity extends ActionBarActivity {
         edtValue = (EditText) findViewById(R.id.edt_value);
 
         txtClient.setText(payment.getClient().toString());
-        edtDate.setText(DateHelper.getStringBr(new Date()));
+        edtDate.setText(DateHelper.getStringBr(payment.getDate()));
+        if (payment.getId() != 0){
+            edtValue.setText(NumberHelper.parseString(payment.getValue()));
+        }
     }
 
 

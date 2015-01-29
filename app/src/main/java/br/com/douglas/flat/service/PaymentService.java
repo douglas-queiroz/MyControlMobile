@@ -52,4 +52,21 @@ public class PaymentService extends AbstractService<Payment> {
 
         return payments;
     }
+
+    @Override
+    public Payment get(int Id) {
+        Payment payment = super.get(Id);
+        payment.setClient(clientService.get(payment.getClient().getId()));
+
+        return payment;
+    }
+
+    @Override
+    public void delete(Payment object) {
+        super.delete(object);
+        Client client = object.getClient();
+        double sale = client.getSale();
+        client.setSale(sale - object.getValue());
+        clientService.save(client);
+    }
 }
