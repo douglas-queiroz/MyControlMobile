@@ -6,6 +6,7 @@
     <string name="title_client">Cliente</string>
     <string name="title_sales">Vendas</string>
     <string name="title_payments">Pagamentos</string>
+    <string name="title_products">Products</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>

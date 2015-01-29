@@ -15,6 +15,7 @@ import br.com.douglas.flat.view.fragments.PaymentListFragment;
 import br.com.douglas.flat.view.fragments.ClientFragment;
 import br.com.douglas.flat.view.fragments.NavigationDrawerFragment;
 import br.com.douglas.flat.R;
+import br.com.douglas.flat.view.fragments.ProdutctListFragment;
 import br.com.douglas.flat.view.fragments.SaleItemFragment;
 import br.com.douglas.flat.view.fragments.StartFragment;
 
@@ -81,6 +82,10 @@ public class MainActivity extends ActionBarActivity
                 fragment = new PaymentListFragment();
                 startFragment(fragment);
                 break;
+            case 4:
+                fragment = new ProdutctListFragment();
+                startFragment(fragment);
+                break;
 
         }
 
@@ -98,6 +103,9 @@ public class MainActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_sales);
                 break;
             case 4:
+                mTitle = getString(R.string.title_payments);
+                break;
+            case 5:
                 mTitle = getString(R.string.title_payments);
                 break;
         }
