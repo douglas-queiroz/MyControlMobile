@@ -30,15 +30,15 @@ public class ProductAdapter extends ArrayAdapter<Product> {
 
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.sale_adapter, null);
+            v = vi.inflate(R.layout.adapter_product, null);
 
         }
 
         Product p = getItem(position);
 
         if (p != null) {
-            TextView tt0 = (TextView) v.findViewById(R.id.txt_client);
-            TextView tt3 = (TextView) v.findViewById(R.id.description);
+            TextView tt0 = (TextView) v.findViewById(R.id.txt_description);
+            TextView tt3 = (TextView) v.findViewById(R.id.txt_value);
 
             if(tt0 != null){
                 tt0.setText(p.getDescription());
