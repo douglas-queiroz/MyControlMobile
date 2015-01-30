@@ -1,6 +1,7 @@
 package br.com.douglas.flat.view.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListAdapter;
 
 import java.util.List;
@@ -17,7 +19,9 @@ import br.com.douglas.flat.R;
 import br.com.douglas.flat.model.Product;
 import br.com.douglas.flat.service.ProductService;
 import br.com.douglas.flat.view.Adapter.ProductAdapter;
+import br.com.douglas.flat.view.activity.ClientActivity;
 import br.com.douglas.flat.view.activity.MainActivity;
+import br.com.douglas.flat.view.activity.ProductActivity;
 
 public class ProdutctListFragment extends Fragment implements AdapterView.OnItemClickListener {
 
@@ -39,7 +43,7 @@ public class ProdutctListFragment extends Fragment implements AdapterView.OnItem
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_payment_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_produtct_list, container, false);
 
         mListView = (AbsListView) v.findViewById(android.R.id.list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
@@ -47,6 +51,14 @@ public class ProdutctListFragment extends Fragment implements AdapterView.OnItem
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
         mContext = (MainActivity) this.getActivity();
+        Button fab = (Button) v.findViewById(R.id.fabbutton);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ProductActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
 
         return v;
     }

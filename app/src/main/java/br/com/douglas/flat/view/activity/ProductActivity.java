@@ -40,6 +40,8 @@ public class ProductActivity extends ActionBarActivity {
 
             edtDescription.setText(mProduct.getDescription());
             edtValue.setText(NumberHelper.parseString(mProduct.getValue()));
+        }else{
+            mProduct = new Product();
         }
     }
 
