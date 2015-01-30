@@ -53,6 +53,11 @@ public class ProdutctListFragment extends Fragment implements AdapterView.OnItem
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ProductDetailFragment.ARG_PRODUCT, productList.get(position));
+        Fragment fragment = new ProductDetailFragment();
+        fragment.setArguments(bundle);
 
+        ((MainActivity) getActivity()).startFragment(fragment);
     }
 }
